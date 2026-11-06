@@ -1,0 +1,31 @@
+How to Fix Google Cloud ADC / Project ID Issues with agents-cli (Vertex AI / Gemini)
+If you are running into HTTP 500: Internal Server Error or DefaultCredentialsError when running agents-cli locally, it is usually because the agent cannot find your Google Cloud credentials or project ID.
+
+Here is the step-by-step guide to properly authenticate and configure your local environment:
+
+Authenticate with Google Cloud (ADC)
+First, log in to set up your Application Default Credentials (ADC) so local libraries can authenticate:
+
+bash
+gcloud auth application-default login
+This will open your web browser to log in with your Google Cloud account.
+
+Set your Google Cloud Project ID
+Define your target Google Cloud Project ID in your terminal session. Replace your-gcp-project-id with your actual project ID from the GCP Console:
+
+bash
+export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
+Configure the Quota Project for your local credentials
+To prevent quota limit or API enablement errors during execution, link your GCP project as the quota project for your ADC credentials:
+
+bash
+gcloud auth application-default set-quota-project your-gcp-project-id
+Configure SDK settings (Optional / Agent Specific)
+If your agent uses Vertex AI via the GenAI SDK, ensure the SDK is instructed to route requests through Vertex:
+
+bash
+export GOOGLE_GENAI_USE_VERTEXAI="True"
+Once these steps are completed, your local server will have all the necessary credentials and configuration to run successfully. You can verify and run your agent with:
+
+bash
+agents-cli run "Hello, how are you?"
